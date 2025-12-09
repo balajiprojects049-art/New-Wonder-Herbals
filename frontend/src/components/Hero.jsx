@@ -19,10 +19,7 @@ const Hero = () => {
                         Nourish Your Body with
                         <span className="text-gradient"> Pure Nature</span>
                     </h1>
-                    <p className="hero-subtitle">
-                        Discover the power of premium organic herbal products crafted from nature's finest ingredients.
-                        Experience authentic wellness with New Wonder Herbals.
-                    </p>
+                    <h2 className="hero-subtitle-large">Nature's Gift for your Wellness</h2>
                     <div className="hero-buttons">
                         <Link to="/products" className="btn btn-primary">
                             Explore Products

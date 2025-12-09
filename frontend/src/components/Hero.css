@@ -64,6 +64,17 @@
     transition: all 0.3s ease;
 }
 
+.hero-subtitle-large {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: #e8f5e9;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 500;
+    letter-spacing: 1px;
+    font-style: italic;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
 .text-gradient:hover {
     background: linear-gradient(135deg, #d4f1d6 0%, #fff 100%);
     -webkit-background-clip: text;
