@@ -74,7 +74,7 @@ const Products = ({ addToCart }) => {
             description: '60ml Roll On - Pain-Relief Oil for external use. Natural ingredients for effective pain management.',
             images: [
                 '/products/pain-cure-3.jpg',  // Front view (Pain Cure packaging) - FIRST
-                '/products/pain-cure-1.jpg',  // Ingredients composition
+                '/products/pain-cure-ingredients.png',  // Ingredients composition (White BG)
                 '/products/pain-cure-2.jpg'   // Back view with details
             ],
             image: '/products/pain-cure-3.jpg', // Main image for cart
