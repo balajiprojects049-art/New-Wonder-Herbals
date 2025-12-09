@@ -1,0 +1,13 @@
+.app {
+    min-height: 100vh;
+}
+
+main {
+    padding-top: 80px;
+    /* Account for fixed header */
+}
+
+/* Smooth scroll offset for anchor links */
+section {
+    scroll-margin-top: 100px;
+}
