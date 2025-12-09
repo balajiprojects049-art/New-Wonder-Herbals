@@ -1,4 +1,4 @@
-import { GiPlantSeed, GiHealing, GiHealthNormal, GiHeartOrgan } from 'react-icons/gi'
+import { GiPlantSeed, GiHealing, GiHealthNormal, GiLotus } from 'react-icons/gi'
 import { IoLeafOutline, IoShieldCheckmarkOutline } from 'react-icons/io5'
 import './Benefits.css'
 
@@ -20,9 +20,9 @@ const Benefits = () => {
             description: 'Strengthens your natural defenses'
         },
         {
-            icon: <GiHeartOrgan />,
-            title: 'Heart Healthy',
-            description: 'Supports cardiovascular wellness'
+            icon: <GiLotus />,
+            title: 'Total Wellness',
+            description: 'Comprehensive health solutions for everyone'
         },
         {
             icon: <GiHealing />,
