@@ -1,4 +1,4 @@
-import { GiPlantSeed, GiHealing, GiMuscleUp, GiHeartOrgan } from 'react-icons/gi'
+import { GiPlantSeed, GiHealing, GiHealthNormal, GiHeartOrgan } from 'react-icons/gi'
 import { IoLeafOutline, IoShieldCheckmarkOutline } from 'react-icons/io5'
 import './Benefits.css'
 
@@ -10,9 +10,9 @@ const Benefits = () => {
             description: 'Pure organic ingredients from nature'
         },
         {
-            icon: <GiMuscleUp />,
-            title: 'High Protein',
-            description: 'Rich in essential proteins and nutrients'
+            icon: <GiHealthNormal />,
+            title: 'No Side Effects',
+            description: 'Safe, gentle and chemical-free'
         },
         {
             icon: <IoShieldCheckmarkOutline />,
