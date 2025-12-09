@@ -25,7 +25,7 @@ const Contact = () => {
         {
             icon: <FiClock />,
             title: 'Business Hours',
-            value: 'Mon - Sat: 9:00 AM - 6:00 PM',
+            value: 'Mon - Sat: 9 AM - 7 PM | Sun: Holiday',
             link: null
         }
     ]
