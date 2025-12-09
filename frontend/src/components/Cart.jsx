@@ -70,9 +70,9 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
             return `• ${item.name} (${item.selectedSize}) x ${item.quantity} = ₹${price * item.quantity}`
         }).join('\n')
 
-        const shippingCharge = customerDetails.deliveryLocation === 'AP' ? 60 : 80
+        const shippingCharge = customerDetails.deliveryLocation === 'AP' ? 100 : 150
         const finalTotal = totalPrice + shippingCharge
-        const deliveryText = customerDetails.deliveryLocation === 'AP' ? 'Andhra Pradesh (₹60)' : 'Other State (₹80)'
+        const deliveryText = customerDetails.deliveryLocation === 'AP' ? 'Andhra Pradesh (₹100)' : 'Other State (₹150)'
 
         const message = encodeURIComponent(
             `*New Order from Website*\n\n` +
@@ -271,7 +271,7 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
                                             checked={customerDetails.deliveryLocation === 'AP'}
                                             onChange={handleInputChange}
                                         />
-                                        Andhra Pradesh (₹60)
+                                        Andhra Pradesh (₹100)
                                     </label>
                                     <label className="radio-label">
                                         <input
@@ -281,7 +281,7 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
                                             checked={customerDetails.deliveryLocation === 'OTHER'}
                                             onChange={handleInputChange}
                                         />
-                                        Other State (₹80)
+                                        Other State (₹150)
                                     </label>
                                 </div>
                                 {formErrors.deliveryLocation && <span className="error-message">{formErrors.deliveryLocation}</span>}
@@ -308,13 +308,13 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
                                     {customerDetails.deliveryLocation && (
                                         <div className="summary-row delivery-charge">
                                             <span>Delivery ({customerDetails.deliveryLocation === 'AP' ? 'AP' : 'Other'}):</span>
-                                            <span>₹{customerDetails.deliveryLocation === 'AP' ? 60 : 80}</span>
+                                            <span>₹{customerDetails.deliveryLocation === 'AP' ? 100 : 150}</span>
                                         </div>
                                     )}
                                     <div className="summary-row final-total">
                                         <span>Total Amount:</span>
                                         <span>
-                                            ₹{totalPrice + (customerDetails.deliveryLocation === 'AP' ? 60 : (customerDetails.deliveryLocation === 'OTHER' ? 80 : 0))}
+                                            ₹{totalPrice + (customerDetails.deliveryLocation === 'AP' ? 100 : (customerDetails.deliveryLocation === 'OTHER' ? 150 : 0))}
                                         </span>
                                     </div>
                                 </div>
