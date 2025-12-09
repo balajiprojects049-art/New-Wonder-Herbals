@@ -1,4 +1,5 @@
-import { GiPlantRoots, GiChemicalDrop, GiLeafSwirl } from 'react-icons/gi'
+import { GiPlantRoots, GiChemicalDrop, GiLeafSwirl, GiRoundBottomFlask } from 'react-icons/gi'
+import { IoRibbonOutline, IoFlaskOutline, IoLeafOutline } from 'react-icons/io5'
 import './About.css'
 
 const About = () => {
@@ -63,20 +64,20 @@ const About = () => {
                     <h3 className="text-center">Quality Certifications</h3>
                     <div className="cert-badges">
                         <div className="cert-badge">
-                            <span>🌿</span>
+                            <div className="cert-icon"><IoLeafOutline size={32} /></div>
                             <p>100% Organic</p>
                         </div>
                         <div className="cert-badge">
-                            <span>✓</span>
-                            <p>Quality Tested</p>
+                            <div className="cert-icon"><IoRibbonOutline size={32} /></div>
+                            <p>Premium Quality</p>
                         </div>
                         <div className="cert-badge">
-                            <span>🍃</span>
-                            <p>Natural & Pure</p>
+                            <div className="cert-icon"><GiRoundBottomFlask size={32} /></div>
+                            <p>Lab Tested</p>
                         </div>
                         <div className="cert-badge">
-                            <span>♻️</span>
-                            <p>Eco Friendly</p>
+                            <div className="cert-icon"><IoFlaskOutline size={32} /></div>
+                            <p>Non-Toxic</p>
                         </div>
                     </div>
                 </div>
