@@ -14,7 +14,6 @@ const HomePage = () => {
                     <div className="cta-content">
                         <h2>Discover Our Premium Herbal Products</h2>
                         <p>Explore our range of 100% organic, pure herbal powders crafted for your wellness</p>
-                        <Link to="/products" className="btn btn-primary">View All Products</Link>
                     </div>
                 </div>
             </section>
