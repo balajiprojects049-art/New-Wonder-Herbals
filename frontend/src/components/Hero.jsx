@@ -16,8 +16,8 @@ const Hero = () => {
             <div className="container hero-content">
                 <div className="hero-text fade-in">
                     <h1 className="hero-title">
-                        Nourish Your Body with
-                        <span className="text-gradient"> Pure Nature</span>
+                        Nourish Your Body with <br />
+                        <span className="text-gradient">Pure Nature</span>
                     </h1>
                     <h2 className="hero-subtitle-large">Nature's Gift for your Wellness</h2>
                     <div className="hero-buttons">
