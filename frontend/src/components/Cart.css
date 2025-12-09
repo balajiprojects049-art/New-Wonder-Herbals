@@ -325,6 +325,33 @@
     margin-top: 0.5rem;
 }
 
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    background: var(--light-gray);
+    padding: 1rem;
+    border-radius: var(--radius-sm);
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    color: var(--dark-gray);
+    cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary-green);
+    margin: 0;
+    cursor: pointer;
+}
+
 .order-summary {
     background: var(--light-gray);
     padding: 1rem;
@@ -356,13 +383,33 @@
 
 .summary-total {
     display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+}
+
+.summary-row {
+    display: flex;
     justify-content: space-between;
-    font-size: 1.1rem;
-    font-weight: 700;
+    align-items: center;
+    font-size: 1rem;
     color: var(--dark-gray);
 }
 
-.summary-total span:last-child {
+.delivery-charge {
+    color: var(--medium-gray);
+    font-size: 0.95rem;
+}
+
+.final-total {
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--white);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.final-total span:last-child {
     color: var(--primary-green);
     font-size: 1.5rem;
 }

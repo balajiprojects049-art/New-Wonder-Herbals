@@ -9,7 +9,8 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
         name: '',
         phone: '',
         address: '',
-        pincode: ''
+        pincode: '',
+        deliveryLocation: '' // 'AP' or 'OTHER'
     })
     const [formErrors, setFormErrors] = useState({})
 
@@ -46,6 +47,9 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
         } else if (!/^\d{6}$/.test(customerDetails.pincode.trim())) {
             errors.pincode = 'Please enter a valid 6-digit pincode'
         }
+        if (!customerDetails.deliveryLocation) {
+            errors.deliveryLocation = 'Please select a delivery location'
+        }
 
         setFormErrors(errors)
         return Object.keys(errors).length === 0
@@ -66,6 +70,10 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
             return `• ${item.name} (${item.selectedSize}) x ${item.quantity} = ₹${price * item.quantity}`
         }).join('\n')
 
+        const shippingCharge = customerDetails.deliveryLocation === 'AP' ? 60 : 80
+        const finalTotal = totalPrice + shippingCharge
+        const deliveryText = customerDetails.deliveryLocation === 'AP' ? 'Andhra Pradesh (₹60)' : 'Other State (₹80)'
+
         const message = encodeURIComponent(
             `*New Order from Website*\n\n` +
             `*Customer Details:*\n` +
@@ -74,7 +82,9 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
             `Address: ${customerDetails.address}\n` +
             `Pincode: ${customerDetails.pincode}\n\n` +
             `*Order Items:*\n${itemsList}\n\n` +
-            `*Total Amount: ₹${totalPrice}*\n\n` +
+            `Subtotal: ₹${totalPrice}\n` +
+            `Delivery Charges: ${deliveryText}\n` +
+            `*Total Amount: ₹${finalTotal}*\n\n` +
             `Please confirm my order. Thank you!`
         )
 
@@ -82,7 +92,9 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
 
         // Reset form and close
         setShowCheckoutForm(false)
-        setCustomerDetails({ name: '', phone: '', address: '', pincode: '' })
+        setShowCheckoutForm(false)
+        setCustomerDetails({ name: '', phone: '', address: '', pincode: '', deliveryLocation: '' })
+        setFormErrors({})
         setFormErrors({})
     }
 
@@ -246,6 +258,35 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
                                 {formErrors.pincode && <span className="error-message">{formErrors.pincode}</span>}
                             </div>
 
+                            <div className="form-group">
+                                <label>
+                                    Delivery Location <span className="required">*</span>
+                                </label>
+                                <div className="radio-group">
+                                    <label className="radio-label">
+                                        <input
+                                            type="radio"
+                                            name="deliveryLocation"
+                                            value="AP"
+                                            checked={customerDetails.deliveryLocation === 'AP'}
+                                            onChange={handleInputChange}
+                                        />
+                                        Andhra Pradesh (₹60)
+                                    </label>
+                                    <label className="radio-label">
+                                        <input
+                                            type="radio"
+                                            name="deliveryLocation"
+                                            value="OTHER"
+                                            checked={customerDetails.deliveryLocation === 'OTHER'}
+                                            onChange={handleInputChange}
+                                        />
+                                        Other State (₹80)
+                                    </label>
+                                </div>
+                                {formErrors.deliveryLocation && <span className="error-message">{formErrors.deliveryLocation}</span>}
+                            </div>
+
                             <div className="order-summary">
                                 <h4>Order Summary</h4>
                                 <div className="summary-items">
@@ -260,8 +301,22 @@ const Cart = ({ isOpen, onClose, cartItems, removeFromCart, updateQuantity, clea
                                     })}
                                 </div>
                                 <div className="summary-total">
-                                    <span>Total Amount:</span>
-                                    <span>₹{totalPrice}</span>
+                                    <div className="summary-row">
+                                        <span>Subtotal:</span>
+                                        <span>₹{totalPrice}</span>
+                                    </div>
+                                    {customerDetails.deliveryLocation && (
+                                        <div className="summary-row delivery-charge">
+                                            <span>Delivery ({customerDetails.deliveryLocation === 'AP' ? 'AP' : 'Other'}):</span>
+                                            <span>₹{customerDetails.deliveryLocation === 'AP' ? 60 : 80}</span>
+                                        </div>
+                                    )}
+                                    <div className="summary-row final-total">
+                                        <span>Total Amount:</span>
+                                        <span>
+                                            ₹{totalPrice + (customerDetails.deliveryLocation === 'AP' ? 60 : (customerDetails.deliveryLocation === 'OTHER' ? 80 : 0))}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
