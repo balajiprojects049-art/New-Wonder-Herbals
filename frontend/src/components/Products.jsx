@@ -58,7 +58,7 @@ const Products = ({ addToCart }) => {
             description: '200ml - A Herbal Liver, Enzyme, Antacid & Alkalizer Syrup. Get relief from Gastrouble in just 10 min.',
             images: [
                 '/products/4-way-action-3.jpg',  // Front view (4 Way Action) - FIRST
-                '/products/4-way-action-1.jpg',  // Side view with details
+                '/products/4-way-action-details.png',  // Side view with details (White BG)
                 '/products/4-way-action-2.jpg'   // Ingredients composition
             ],
             image: '/products/4-way-action-3.jpg', // Main image for cart
