@@ -10,8 +10,9 @@ const Products = ({ addToCart }) => {
             description: '90 tablets - Natural herbal supplement for diabetes management and immunity support.',
             images: [
                 '/products/diabet-fit-3.jpg',  // Front view (Arogya Sanjivini) - FIRST
-                '/products/diabet-fit-1.jpg',  // Side view with details
-                '/products/diabet-fit-2.jpg'   // Back view with ingredients
+                '/products/diabet-fit-2.jpg',  // Back view with ingredients
+                '/products/diabet-fit-1.jpg'  // Side view with details
+
             ],
             image: '/products/diabet-fit-3.jpg', // Main image for cart
             benefits: ['Diabetic Control', 'Immunity Booster', 'Good HBA1C Results', 'Herbal Supplement'],
@@ -26,8 +27,9 @@ const Products = ({ addToCart }) => {
             description: '90 tablets - Natural herbal supplement for joint pain relief, arthritis, and obesity management.',
             images: [
                 '/products/vardhini-3.jpg',  // Front view (Arogya Vardhini) - FIRST
-                '/products/vardhini-1.jpg',  // Side view with details
-                '/products/vardhini-2.jpg'   // Back view with ingredients
+                '/products/vardhini-2.jpg',  // Back view with ingredients
+                '/products/vardhini-1.jpg' // Side view with details
+
             ],
             image: '/products/vardhini-3.jpg', // Main image for cart
             benefits: ['Reducing Joint Pains', 'Arthritis Relief', 'Obesity Management', 'Herbal Supplement'],
@@ -42,8 +44,9 @@ const Products = ({ addToCart }) => {
             description: '30 tablets - High quality natural herbal supplement for piles, constipation, and digestive health.',
             images: [
                 '/products/zero-piles-3.jpg',  // Front view (Zero Piles) - FIRST
-                '/products/zero-piles-1.jpg',  // Back view with details
-                '/products/zero-piles-2.jpg'   // Ingredients view
+                '/products/zero-piles-2.jpg',  // Ingredients view
+                '/products/zero-piles-1.jpg' // Back view with details
+
             ],
             image: '/products/zero-piles-3.jpg', // Main image for cart
             benefits: ['Constipation Relief', 'Stops Bleeding', 'Reduce Pain', 'Remove Lumps'],
@@ -58,8 +61,9 @@ const Products = ({ addToCart }) => {
             description: '200ml - A Herbal Liver, Enzyme, Antacid & Alkalizer Syrup. Get relief from Gastrouble in just 10 min.',
             images: [
                 '/products/4-way-action-3.jpg',  // Front view (4 Way Action) - FIRST
-                '/products/4-way-action-details.png',  // Side view with details (White BG)
-                '/products/4-way-action-2.jpg'   // Ingredients composition
+                '/products/4-way-action-2.jpg',  // Ingredients composition
+                '/products/4-way-action-details.png' // Side view with details (White BG)
+
             ],
             image: '/products/4-way-action-3.jpg', // Main image for cart
             benefits: ['Relief from Gastrouble in 10 min', 'Liver Support', 'Enzyme & Antacid', 'Alkalizer'],
