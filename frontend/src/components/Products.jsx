@@ -5,54 +5,6 @@ import './Products.css'
 const Products = ({ addToCart }) => {
     const products = [
         {
-            id: 5,
-            name: 'PAIN CURE Oil',
-            description: '60ml Roll On - Pain-Relief Oil for external use. Natural ingredients for effective pain management.',
-            images: [
-                '/products/pain-cure-3.jpg',  // Front view (Pain Cure packaging) - FIRST
-                '/products/pain-cure-ingredients.png',  // Ingredients composition (White BG)
-                '/products/pain-cure-2.jpg'   // Back view with details
-            ],
-            image: '/products/pain-cure-3.jpg', // Main image for cart
-            benefits: ['Reducing Joint Pain', 'Arthritis Relief', 'Muscle Pain Relief', 'Roll On Application'],
-            mrp: 110,
-            sizes: [
-                { size: '60ml Roll On', price: 100 }
-            ]
-        },
-        {
-            id: 4,
-            name: '4 Way Action',
-            description: '200ml - A Herbal Liver, Enzyme, Antacid & Alkalizer Syrup. Get relief from Gastrouble in just 10 min.',
-            images: [
-                '/products/4-way-action-3.jpg',  // Front view (4 Way Action) - FIRST
-                '/products/4-way-action-details.png',  // Side view with details (White BG)
-                '/products/4-way-action-2.jpg'   // Ingredients composition
-            ],
-            image: '/products/4-way-action-3.jpg', // Main image for cart
-            benefits: ['Relief from Gastrouble in 10 min', 'Liver Support', 'Enzyme & Antacid', 'Alkalizer'],
-            mrp: 160,
-            sizes: [
-                { size: '200ml Syrup', price: 150 }
-            ]
-        },
-        {
-            id: 3,
-            name: 'Zero Piles',
-            description: '30 tablets - High quality natural herbal supplement for piles, constipation, and digestive health.',
-            images: [
-                '/products/zero-piles-3.jpg',  // Front view (Zero Piles) - FIRST
-                '/products/zero-piles-1.jpg',  // Back view with details
-                '/products/zero-piles-2.jpg'   // Ingredients view
-            ],
-            image: '/products/zero-piles-3.jpg', // Main image for cart
-            benefits: ['Constipation Relief', 'Stops Bleeding', 'Reduce Pain', 'Remove Lumps'],
-            mrp: 349,
-            sizes: [
-                { size: '30 Tablets', price: 299 }
-            ]
-        },
-        {
             id: 1,
             name: 'Arogya Sanjivini - Diabet Fit',
             description: '90 tablets - Natural herbal supplement for diabetes management and immunity support.',
@@ -82,6 +34,54 @@ const Products = ({ addToCart }) => {
             mrp: 645,
             sizes: [
                 { size: '90 Tablets', price: 499 }
+            ]
+        },
+        {
+            id: 3,
+            name: 'Zero Piles',
+            description: '30 tablets - High quality natural herbal supplement for piles, constipation, and digestive health.',
+            images: [
+                '/products/zero-piles-3.jpg',  // Front view (Zero Piles) - FIRST
+                '/products/zero-piles-1.jpg',  // Back view with details
+                '/products/zero-piles-2.jpg'   // Ingredients view
+            ],
+            image: '/products/zero-piles-3.jpg', // Main image for cart
+            benefits: ['Constipation Relief', 'Stops Bleeding', 'Reduce Pain', 'Remove Lumps'],
+            mrp: 349,
+            sizes: [
+                { size: '30 Tablets', price: 299 }
+            ]
+        },
+        {
+            id: 4,
+            name: '4 Way Action',
+            description: '200ml - A Herbal Liver, Enzyme, Antacid & Alkalizer Syrup. Get relief from Gastrouble in just 10 min.',
+            images: [
+                '/products/4-way-action-3.jpg',  // Front view (4 Way Action) - FIRST
+                '/products/4-way-action-details.png',  // Side view with details (White BG)
+                '/products/4-way-action-2.jpg'   // Ingredients composition
+            ],
+            image: '/products/4-way-action-3.jpg', // Main image for cart
+            benefits: ['Relief from Gastrouble in 10 min', 'Liver Support', 'Enzyme & Antacid', 'Alkalizer'],
+            mrp: 160,
+            sizes: [
+                { size: '200ml Syrup', price: 150 }
+            ]
+        },
+        {
+            id: 5,
+            name: 'PAIN CURE Oil',
+            description: '60ml Roll On - Pain-Relief Oil for external use. Natural ingredients for effective pain management.',
+            images: [
+                '/products/pain-cure-3.jpg',  // Front view (Pain Cure packaging) - FIRST
+                '/products/pain-cure-ingredients.png',  // Ingredients composition (White BG)
+                '/products/pain-cure-2.jpg'   // Back view with details
+            ],
+            image: '/products/pain-cure-3.jpg', // Main image for cart
+            benefits: ['Reducing Joint Pain', 'Arthritis Relief', 'Muscle Pain Relief', 'Roll On Application'],
+            mrp: 110,
+            sizes: [
+                { size: '60ml Roll On', price: 100 }
             ]
         },
         {
