@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { ProductProvider } from './context/ProductContext'
 import ScrollToTop from './components/ScrollToTop'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -10,6 +11,8 @@ import ProductsPage from './pages/ProductsPage'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import PoliciesPage from './pages/PoliciesPage'
+import AdminLogin from './pages/admin/AdminLogin'
+import AdminDashboard from './pages/admin/AdminDashboard'
 import './App.css'
 
 function App() {
@@ -79,35 +82,39 @@ function App() {
     }
 
     return (
-        <Router>
-            <ScrollToTop />
-            <div className="app">
-                <Header
-                    cartCount={getTotalItems()}
-                    onCartClick={() => setIsCartOpen(true)}
-                />
-                <main>
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/products" element={<ProductsPage addToCart={addToCart} />} />
-                        <Route path="/about" element={<AboutPage />} />
-                        <Route path="/contact" element={<ContactPage />} />
-                        <Route path="/policies" element={<PoliciesPage />} />
-                    </Routes>
-                </main>
-                <Footer />
-                <Cart
-                    isOpen={isCartOpen}
-                    onClose={() => setIsCartOpen(false)}
-                    cartItems={cartItems}
-                    removeFromCart={removeFromCart}
-                    updateQuantity={updateQuantity}
-                    clearCart={clearCart}
-                    totalPrice={getTotalPrice()}
-                />
-                <WhatsAppButton />
-            </div>
-        </Router>
+        <ProductProvider>
+            <Router>
+                <ScrollToTop />
+                <div className="app">
+                    <Header
+                        cartCount={getTotalItems()}
+                        onCartClick={() => setIsCartOpen(true)}
+                    />
+                    <main>
+                        <Routes>
+                            <Route path="/" element={<HomePage />} />
+                            <Route path="/products" element={<ProductsPage addToCart={addToCart} />} />
+                            <Route path="/about" element={<AboutPage />} />
+                            <Route path="/contact" element={<ContactPage />} />
+                            <Route path="/policies" element={<PoliciesPage />} />
+                            <Route path="/admin" element={<AdminLogin />} />
+                            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                        </Routes>
+                    </main>
+                    <Footer />
+                    <Cart
+                        isOpen={isCartOpen}
+                        onClose={() => setIsCartOpen(false)}
+                        cartItems={cartItems}
+                        removeFromCart={removeFromCart}
+                        updateQuantity={updateQuantity}
+                        clearCart={clearCart}
+                        totalPrice={getTotalPrice()}
+                    />
+                    <WhatsAppButton />
+                </div>
+            </Router>
+        </ProductProvider>
     )
 }
 

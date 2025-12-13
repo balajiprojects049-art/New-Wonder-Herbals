@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi'
+import { FiMail, FiPhone, FiMapPin, FiLock } from 'react-icons/fi'
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa'
 import './Footer.css'
 
@@ -62,7 +62,12 @@ const Footer = () => {
                 </div>
 
                 <div className="footer-bottom">
-                    <p>&copy; 2025 New Wonder Herbals. All rights reserved.</p>
+                    <p>
+                        &copy; 2025 New Wonder Herbals. All rights reserved.
+                        <Link to="/admin" className="hidden-admin-lock">
+                            <FiLock size={12} />
+                        </Link>
+                    </p>
                     <p>Delivery: Within AP ₹100 | Outside AP ₹150</p>
                     <p>Made with 💚 for your wellness</p>
                 </div>

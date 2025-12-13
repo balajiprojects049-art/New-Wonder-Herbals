@@ -134,3 +134,20 @@
         text-align: center;
     }
 }
+
+/* Hidden Admin Lock */
+.hidden-admin-lock {
+    opacity: 0.1;
+    transition: all 0.3s ease;
+    color: var(--white);
+    display: inline-flex;
+    margin-left: 8px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.hidden-admin-lock:hover {
+    opacity: 1;
+    color: var(--primary-green);
+    transform: scale(1.1);
+}
