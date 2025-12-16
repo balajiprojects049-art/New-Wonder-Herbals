@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProducts } from '../../context/ProductContext'
 import { FiSearch, FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiCheck, FiAlertTriangle, FiLogOut, FiDatabase } from 'react-icons/fi'
-import { seedProducts } from '../../data/seedProducts'
 import './Admin.css'
 
 const Toast = ({ message, type, onClose }) => {
@@ -67,23 +66,6 @@ const AdminDashboard = () => {
     const handleLogout = () => {
         localStorage.removeItem('admin_session')
         navigate('/admin')
-    }
-
-    const handleSeedProducts = async () => {
-        try {
-            showToast('Seeding products to database...', 'success')
-            const result = await seedProducts()
-
-            if (result.success) {
-                showToast(`✅ Successfully added ${result.count} products to database!`, 'success')
-            } else if (result.message) {
-                showToast(`ℹ️ ${result.message} (${result.count} products found)`, 'success')
-            } else {
-                showToast(`Error: ${result.error}`, 'error')
-            }
-        } catch (error) {
-            showToast(`Error seeding products: ${error.message}`, 'error')
-        }
     }
 
     const handleResetDatabase = async () => {
