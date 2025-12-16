@@ -3,8 +3,41 @@
 [![React](https://img.shields.io/badge/React-18.2-blue.svg)](https://react.dev/)
 [![Node](https://img.shields.io/badge/Node.js-20+-green.svg)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.18-brightgreen.svg)](https://expressjs.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-10+-orange.svg)](https://firebase.google.com/)
 
-A premium full-stack e-commerce website for New Wonder Herbals, featuring organic herbal products with a modern, responsive design built using React.js and Node.js.
+A premium full-stack e-commerce website for New Wonder Herbals, featuring organic herbal products with a modern, responsive design built using React.js, Node.js, and Firebase Firestore.
+
+---
+
+## 🔥 **IMPORTANT: Admin Panel Upgraded to Cloud Database!**
+
+**Latest Update (Dec 16, 2025):** The admin panel has been upgraded from localStorage to **Firebase Firestore** cloud database!
+
+### **What This Means:**
+- ✅ **Real-time sync** - Changes appear instantly across all devices
+- ✅ **Cloud storage** - Products saved permanently, never lost
+- ✅ **Multi-device support** - Edit from laptop, phone, or tablet
+- ✅ **Production-ready** - Professional database system
+- ✅ **100% FREE** - Generous Firebase free tier
+
+### **Setup Required:**
+- 📖 **Read:** [`FIREBASE_SETUP.md`](FIREBASE_SETUP.md) - Complete 15-minute setup guide
+- 📊 **Summary:** [`CLIENT_SUMMARY.md`](CLIENT_SUMMARY.md) - Overview of changes
+- ⚡ **Quick Start:** [`QUICKSTART_FIREBASE.md`](QUICKSTART_FIREBASE.md) - Get started fast
+
+**Note:** System works with localStorage fallback until Firebase is configured.
+
+---
+
+## Admin Panel Features
+- ✅ **Hidden Admin Access** - Password-protected dashboard  
+- ✅ **Cloud Database** - Firebase Firestore integration
+- ✅ **Real-time Sync** - Changes appear instantly across devices
+- ✅ **Full CRUD** - Add, edit, delete products with images
+- ✅ **Image Handling** - Multiple images per product, auto-compression
+- ✅ **Rich Product Data** - Benefits, sizes, pricing, MRP
+- ✅ **Loading States** - Professional UX with spinners and error handling
+- ✅ **Toast Notifications** - Success/error feedback
 
 ## 🌿 Features
 

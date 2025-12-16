@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useProducts } from '../../context/ProductContext'
-import { FiSearch, FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiCheck, FiAlertTriangle, FiLogOut } from 'react-icons/fi'
+import { FiSearch, FiPlus, FiEdit2, FiTrash2, FiSave, FiX, FiCheck, FiAlertTriangle, FiLogOut, FiDatabase } from 'react-icons/fi'
+import { seedProducts } from '../../data/seedProducts'
 import './Admin.css'
 
 const Toast = ({ message, type, onClose }) => {
@@ -40,7 +41,7 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
 }
 
 const AdminDashboard = () => {
-    const { products, addProduct, updateProduct, deleteProduct } = useProducts()
+    const { products, addProduct, updateProduct, deleteProduct, loading, error } = useProducts()
     const navigate = useNavigate()
     const [searchTerm, setSearchTerm] = useState('')
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -66,6 +67,23 @@ const AdminDashboard = () => {
     const handleLogout = () => {
         localStorage.removeItem('admin_session')
         navigate('/admin')
+    }
+
+    const handleSeedProducts = async () => {
+        try {
+            showToast('Seeding products to database...', 'success')
+            const result = await seedProducts()
+
+            if (result.success) {
+                showToast(`✅ Successfully added ${result.count} products to database!`, 'success')
+            } else if (result.message) {
+                showToast(`ℹ️ ${result.message} (${result.count} products found)`, 'success')
+            } else {
+                showToast(`Error: ${result.error}`, 'error')
+            }
+        } catch (error) {
+            showToast(`Error seeding products: ${error.message}`, 'error')
+        }
     }
 
     // Image Handling
@@ -131,7 +149,7 @@ const AdminDashboard = () => {
                 price: parseFloat(newProduct.price)
             }] : []
 
-            addProduct({
+            const result = await addProduct({
                 ...newProduct,
                 images: processedImages,
                 image: processedImages[0], // Primary image
@@ -140,15 +158,19 @@ const AdminDashboard = () => {
                 mrp: newProduct.mrp ? parseFloat(newProduct.mrp) : null
             })
 
-            setIsAddModalOpen(false)
-            setNewProduct({
-                name: '', category: 'Health', subCategory: '', description: '',
-                images: [], benefits: '', size: '', price: '', mrp: ''
-            })
-            showToast('Product added successfully!')
+            if (result.success) {
+                setIsAddModalOpen(false)
+                setNewProduct({
+                    name: '', category: 'Health', subCategory: '', description: '',
+                    images: [], benefits: '', size: '', price: '', mrp: ''
+                })
+                showToast('Product added successfully to cloud database!')
+            } else {
+                showToast('Error adding product: ' + (result.error || 'Unknown error'), 'error')
+            }
         } catch (error) {
             console.error(error)
-            showToast('Error processing images', 'error')
+            showToast('Error processing product: ' + error.message, 'error')
         }
     }
 
@@ -185,7 +207,7 @@ const AdminDashboard = () => {
                 price: parseFloat(editForm.editPrice)
             }] : []
 
-            updateProduct({
+            const result = await updateProduct({
                 ...editForm,
                 images: imagesToSave,
                 image: imagesToSave[0],
@@ -193,11 +215,16 @@ const AdminDashboard = () => {
                 sizes: sizesArray,
                 mrp: editForm.editMrp ? parseFloat(editForm.editMrp) : null
             })
-            setEditingId(null)
-            showToast('Product updated successfully!')
+
+            if (result.success) {
+                setEditingId(null)
+                showToast('Product updated successfully in cloud database!')
+            } else {
+                showToast('Error updating product: ' + (result.error || 'Unknown error'), 'error')
+            }
         } catch (error) {
             console.error(error)
-            showToast('Error updating product', 'error')
+            showToast('Error updating product: ' + error.message, 'error')
         }
     }
 
@@ -219,6 +246,46 @@ const AdminDashboard = () => {
 
     return (
         <div className="admin-container fade-in">
+            {/* Loading State */}
+            {loading && (
+                <div style={{
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    textAlign: 'center',
+                    zIndex: 9999
+                }}>
+                    <div style={{
+                        border: '4px solid #f3f3f3',
+                        borderTop: '4px solid #10b981',
+                        borderRadius: '50%',
+                        width: '50px',
+                        height: '50px',
+                        animation: 'spin 1s linear infinite',
+                        margin: '0 auto'
+                    }}></div>
+                    <p style={{ marginTop: '1rem', color: '#666' }}>Loading products from cloud...</p>
+                </div>
+            )}
+
+            {/* Error State */}
+            {error && (
+                <div style={{
+                    background: '#fee',
+                    color: '#c33',
+                    padding: '1rem',
+                    borderRadius: '8px',
+                    margin: '1rem',
+                    border: '1px solid #fcc'
+                }}>
+                    <strong>Error:</strong> {error}
+                    <p style={{ fontSize: '0.9em', marginTop: '0.5rem' }}>
+                        Falling back to local storage. Please check your Firebase configuration.
+                    </p>
+                </div>
+            )}
+
             {/* Toasts */}
             <div className="toast-container">
                 {toasts.map(toast => (
@@ -229,9 +296,20 @@ const AdminDashboard = () => {
             {/* Header */}
             <div className="admin-header">
                 <h1 className="admin-title">Product Dashboard</h1>
-                <button onClick={handleLogout} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <FiLogOut /> Logout
-                </button>
+                <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    {products.length === 0 && !loading && (
+                        <button
+                            onClick={handleSeedProducts}
+                            className="btn-secondary"
+                            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#10b981', color: 'white', borderColor: '#10b981' }}
+                        >
+                            <FiDatabase /> Seed Initial Products
+                        </button>
+                    )}
+                    <button onClick={handleLogout} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <FiLogOut /> Logout
+                    </button>
+                </div>
             </div>
 
             {/* Controls */}
@@ -492,10 +570,15 @@ const AdminDashboard = () => {
                 title="Delete Product"
                 message={`Are you sure you want to delete '${deleteModal.productName}'? This action cannot be undone.`}
                 onCancel={() => setDeleteModal({ isOpen: false, productId: null, productName: '' })}
-                onConfirm={() => {
-                    deleteProduct(deleteModal.productId)
+                onConfirm={async () => {
+                    const result = await deleteProduct(deleteModal.productId)
                     setDeleteModal({ isOpen: false, productId: null, productName: '' })
-                    showToast('Product deleted successfully!')
+
+                    if (result.success) {
+                        showToast('Product deleted successfully from cloud database!')
+                    } else {
+                        showToast('Error deleting product: ' + (result.error || 'Unknown error'), 'error')
+                    }
                 }}
             />
         </div>
