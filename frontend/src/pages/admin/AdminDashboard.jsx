@@ -291,15 +291,6 @@ const AdminDashboard = () => {
             <div className="admin-header">
                 <h1 className="admin-title">Product Dashboard</h1>
                 <div style={{ display: 'flex', gap: '0.75rem' }}>
-                    {products.length === 0 && !loading && (
-                        <button
-                            onClick={handleSeedProducts}
-                            className="btn-secondary"
-                            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#10b981', color: 'white', borderColor: '#10b981' }}
-                        >
-                            <FiDatabase /> Seed Initial Products
-                        </button>
-                    )}
                     <button onClick={handleLogout} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <FiLogOut /> Logout
                     </button>
