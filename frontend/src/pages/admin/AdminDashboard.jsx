@@ -263,23 +263,6 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {/* Error State */}
-            {error && (
-                <div style={{
-                    background: '#fee',
-                    color: '#c33',
-                    padding: '1rem',
-                    borderRadius: '8px',
-                    margin: '1rem',
-                    border: '1px solid #fcc'
-                }}>
-                    <strong>Error:</strong> {error}
-                    <p style={{ fontSize: '0.9em', marginTop: '0.5rem' }}>
-                        Falling back to local storage. Please check your Firebase configuration.
-                    </p>
-                </div>
-            )}
-
             {/* Toasts */}
             <div className="toast-container">
                 {toasts.map(toast => (
