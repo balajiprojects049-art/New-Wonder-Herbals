@@ -7,7 +7,7 @@ const ProductsPage = ({ addToCart }) => {
             <div className="page-header">
                 <div className="container">
                     <h1>Our Premium Products</h1>
-                    <p>Discover our range of 100% organic herbal powders</p>
+                    <p>Discover our range of 100% organic herbal medicines</p>
                 </div>
             </div>
             <Products addToCart={addToCart} />
