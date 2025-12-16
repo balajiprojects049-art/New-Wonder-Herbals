@@ -170,12 +170,42 @@ export const ProductProvider = ({ children }) => {
         }
     };
 
+    // Nuclear Option: Delete all and re-seed
+    const resetDatabase = async () => {
+        try {
+            setLoading(true);
+            const querySnapshot = await getDocs(productsCollectionRef);
+
+            // 1. Delete all existing products
+            const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
+            await Promise.all(deletePromises);
+
+            // 2. Add initial products
+            for (const product of initialProducts) {
+                await addDoc(productsCollectionRef, {
+                    ...product,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
+            }
+            console.log("✅ Database reset successfully");
+            setLoading(false);
+            return { success: true };
+        } catch (err) {
+            console.error("❌ Error resetting database:", err);
+            setError(err.message);
+            setLoading(false);
+            return { success: false, error: err.message };
+        }
+    };
+
     return (
         <ProductContext.Provider value={{
             products,
             addProduct,
             updateProduct,
             deleteProduct,
+            resetDatabase,
             loading,
             error
         }}>

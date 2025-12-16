@@ -41,7 +41,7 @@ const ConfirmModal = ({ isOpen, title, message, onConfirm, onCancel }) => {
 }
 
 const AdminDashboard = () => {
-    const { products, addProduct, updateProduct, deleteProduct, loading, error } = useProducts()
+    const { products, addProduct, updateProduct, deleteProduct, resetDatabase, loading, error } = useProducts()
     const navigate = useNavigate()
     const [searchTerm, setSearchTerm] = useState('')
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)
@@ -83,6 +83,18 @@ const AdminDashboard = () => {
             }
         } catch (error) {
             showToast(`Error seeding products: ${error.message}`, 'error')
+        }
+    }
+
+    const handleResetDatabase = async () => {
+        if (window.confirm('⚠️ WARNING: This will DELETE ALL PRODUCTS and restore the original 6 products. Are you sure?')) {
+            showToast('Resetting database...', 'info');
+            const result = await resetDatabase();
+            if (result.success) {
+                showToast('Database reset successfully! All 6 products restored.', 'success');
+            } else {
+                showToast(result.error || 'Failed to reset database', 'error');
+            }
         }
     }
 
@@ -324,9 +336,14 @@ const AdminDashboard = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <button className="add-btn" onClick={() => setIsAddModalOpen(true)}>
-                    <FiPlus /> Add New Product
-                </button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <button className="add-btn" style={{ background: '#ef4444' }} onClick={handleResetDatabase}>
+                        <FiDatabase style={{ marginRight: '5px' }} /> Reset DB
+                    </button>
+                    <button className="add-btn" onClick={() => setIsAddModalOpen(true)}>
+                        <FiPlus /> Add New Product
+                    </button>
+                </div>
             </div>
 
             {/* Product Grid */}
