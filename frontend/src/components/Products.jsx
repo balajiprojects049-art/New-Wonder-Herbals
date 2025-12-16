@@ -148,7 +148,7 @@ const Products = ({ addToCart }) => {
             <div className="container">
                 <div className="section-header text-center">
                     <h2 className="fade-in">Our Premium Products</h2>
-                    <p className="fade-in">Handpicked organic herbal powders for your wellness journey</p>
+                    <p className="fade-in">Handpicked organic herbal medicines for your wellness journey</p>
                 </div>
 
                 <div className="products-grid">

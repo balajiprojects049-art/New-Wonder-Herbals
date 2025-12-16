@@ -13,7 +13,7 @@ const HomePage = () => {
                 <div className="container">
                     <div className="cta-content">
                         <h2>Discover Our Premium Herbal Products</h2>
-                        <p>Explore our range of 100% organic, pure herbal powders crafted for your wellness</p>
+                        <p>Explore our range of 100% organic, pure herbal medicines crafted for your wellness</p>
                     </div>
                 </div>
             </section>
