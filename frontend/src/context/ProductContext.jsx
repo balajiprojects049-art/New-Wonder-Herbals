@@ -16,14 +16,22 @@ export const ProductProvider = ({ children }) => {
 
             const data = await response.json();
 
-            // Map DB columns (snake_case) to frontend (camelCase) if needed
-            const formatted = data.map(p => ({
+            // Support multiple API shapes:
+            // - Serverless `api/products` returns an array of rows
+            // - Express backend returns { success,count,data }
+            // - Postgres query may return { rows: [...] }
+            const productsArray = Array.isArray(data)
+                ? data
+                : (data.data || data.rows || []);
+
+            // Normalize snake_case/camelCase fields to frontend camelCase
+            const formatted = productsArray.map(p => ({
                 ...p,
-                subCategory: p.sub_category,
-                isCombo: p.is_combo
+                subCategory: p.subCategory ?? p.sub_category,
+                isCombo: p.isCombo ?? p.is_combo
             }));
 
-            setProducts(formatted);
+            setProducts(formatted || []);
             setLoading(false);
             setError(null);
         } catch (err) {

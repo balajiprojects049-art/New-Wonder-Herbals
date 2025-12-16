@@ -1,152 +1,138 @@
+import 'dotenv/config'
 import express from 'express'
+import { Pool } from 'pg'
 
 const router = express.Router()
 
-// Products data (in a real app, this would be from a database)
-const products = [
-    {
-        id: 1,
-        name: 'Organic Moringa Powder',
-        description: 'Pure moringa leaf powder packed with essential nutrients, vitamins, and antioxidants for overall wellness.',
-        image: 'https://images.unsplash.com/photo-1505253758473-96b7015fcd40?w=400&h=400&fit=crop',
-        category: 'Superfoods',
-        benefits: ['High in Vitamin C', 'Boosts Energy', 'Anti-inflammatory', 'Rich in Antioxidants'],
-        sizes: [
-            { size: '250g', price: 299, stock: 50 },
-            { size: '500g', price: 549, stock: 30 }
-        ],
-        rating: 4.8,
-        reviews: 124
-    },
-    {
-        id: 2,
-        name: 'Organic Beetroot Powder',
-        description: 'Premium beetroot powder rich in iron, vitamins, and minerals to support heart health and stamina.',
-        image: 'https://images.unsplash.com/photo-1459411621453-7b03977f4baa?w=400&h=400&fit=crop',
-        category: 'Vegetables',
-        benefits: ['Improves Blood Flow', 'Increases Stamina', 'Rich in Iron', 'Supports Heart Health'],
-        sizes: [
-            { size: '250g', price: 249, stock: 60 },
-            { size: '500g', price: 449, stock: 40 }
-        ],
-        rating: 4.7,
-        reviews: 98
-    },
-    {
-        id: 3,
-        name: 'Organic Banana Powder',
-        description: 'Natural banana powder loaded with potassium and dietary fiber for digestive health and energy.',
-        image: 'https://images.unsplash.com/photo-1481391243133-f96216dcb5d2?w=400&h=400&fit=crop',
-        category: 'Fruits',
-        benefits: ['High in Potassium', 'Aids Digestion', 'Natural Energy', 'Rich in Fiber'],
-        sizes: [
-            { size: '250g', price: 199, stock: 70 },
-            { size: '500g', price: 349, stock: 50 }
-        ],
-        rating: 4.6,
-        reviews: 87
-    },
-    {
-        id: 4,
-        name: 'Organic Turmeric Powder',
-        description: 'Pure turmeric powder with curcumin to boost immunity and provide natural anti-inflammatory benefits.',
-        image: 'https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=400&h=400&fit=crop',
-        category: 'Spices',
-        benefits: ['Anti-inflammatory', 'Boosts Immunity', 'Antioxidant Rich', 'Natural Healer'],
-        sizes: [
-            { size: '250g', price: 179, stock: 80 },
-            { size: '500g', price: 319, stock: 60 }
-        ],
-        rating: 4.9,
-        reviews: 156
-    },
-    {
-        id: 5,
-        name: 'Organic Amla Powder',
-        description: 'Vitamin C rich amla powder to enhance immunity, promote hair growth, and improve skin health.',
-        image: 'https://images.unsplash.com/photo-1571771022147-e48a29746c0f?w=400&h=400&fit=crop',
-        category: 'Fruits',
-        benefits: ['Rich in Vitamin C', 'Promotes Hair Growth', 'Improves Digestion', 'Enhances Immunity'],
-        sizes: [
-            { size: '250g', price: 229, stock: 55 },
-            { size: '500g', price: 399, stock: 35 }
-        ],
-        rating: 4.7,
-        reviews: 112
-    },
-    {
-        id: 6,
-        name: 'Organic Spirulina Powder',
-        description: 'Nutrient-dense spirulina powder with complete protein profile and essential amino acids.',
-        image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400&h=400&fit=crop',
-        category: 'Superfoods',
-        benefits: ['Complete Protein', 'Detoxifies Body', 'Boosts Energy', 'Rich in B Vitamins'],
-        sizes: [
-            { size: '250g', price: 399, stock: 45 },
-            { size: '500g', price: 749, stock: 25 }
-        ],
-        rating: 4.8,
-        reviews: 93
-    }
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+})
+
+// Initial products used for seeding
+const initialProducts = [
+    { id: 1, name: 'Arogya Sanjivini - Diabet Fit', category: 'Health', subCategory: 'Diabetes', description: '90 tablets - Natural herbal supplement for diabetes management and immunity support.', images: ['/products/diabet-fit-3.jpg', '/products/diabet-fit-2.jpg', '/products/diabet-fit-1.jpg'], image: '/products/diabet-fit-3.jpg', benefits: ['Diabetic Control', 'Immunity Booster', 'Good HBA1C Results', 'Herbal Supplement'], mrp: 645, sizes: [{ size: '90 Tablets', price: 499 }] },
+    { id: 2, name: 'Arogya Vardhini', category: 'Health', subCategory: 'Joint Pain', description: '90 tablets - Natural herbal supplement for joint pain relief, arthritis, and obesity management.', images: ['/products/vardhini-3.jpg', '/products/vardhini-2.jpg', '/products/vardhini-1.jpg'], image: '/products/vardhini-3.jpg', benefits: ['Reducing Joint Pains', 'Arthritis Relief', 'Obesity Management', 'Herbal Supplement'], mrp: 645, sizes: [{ size: '90 Tablets', price: 499 }] },
+    { id: 3, name: 'Zero Piles', category: 'Health', subCategory: 'Digestive', description: '30 tablets - High quality natural herbal supplement for piles, constipation, and digestive health.', images: ['/products/zero-piles-3.jpg', '/products/zero-piles-2.jpg', '/products/zero-piles-1.jpg'], image: '/products/zero-piles-3.jpg', benefits: ['Constipation Relief', 'Stops Bleeding', 'Reduce Pain', 'Remove Lumps'], mrp: 349, sizes: [{ size: '30 Tablets', price: 299 }] },
+    { id: 4, name: '4 Way Action', category: 'Health', subCategory: 'Digestive', description: '200ml - A Herbal Liver, Enzyme, Antacid & Alkalizer Syrup. Get relief from Gastrouble in just 10 min.', images: ['/products/4-way-action-3.jpg', '/products/4-way-action-2.jpg', '/products/4-way-action-details.png'], image: '/products/4-way-action-3.jpg', benefits: ['Relief from Gastrouble in 10 min', 'Liver Support', 'Enzyme & Antacid', 'Alkalizer'], mrp: 160, sizes: [{ size: '200ml Syrup', price: 150 }] },
+    { id: 5, name: 'PAIN CURE Oil', category: 'Pain Relief', subCategory: 'External', description: '60ml Roll On - Pain-Relief Oil for external use.', images: ['/products/pain-cure-3.jpg', '/products/pain-cure-ingredients.png', '/products/pain-cure-2.jpg'], image: '/products/pain-cure-3.jpg', benefits: ['Reducing Joint Pain', 'Arthritis Relief', 'Muscle Pain Relief', 'Roll On Application'], mrp: 110, sizes: [{ size: '60ml Roll On', price: 100 }] },
+    { id: 6, name: 'Arogya Vardhini/Pain cure oil', category: 'Combos', subCategory: 'Pain Relief', description: 'COMBO PACK - Arogya Vardhini (90 tablets) + PAIN CURE Oil (60ml Roll On).', images: ['/products/vardhini-3.jpg', '/products/pain-cure-3.jpg'], image: '/products/vardhini-3.jpg', benefits: ['Complete Joint Pain Solution', 'Internal + External Relief', 'Arthritis Management', 'Combo Savings - Save ₹50!'], mrp: 599, sizes: [{ size: 'Combo Pack (2 items)', price: 549 }], isCombo: true }
 ]
 
-// GET all products
-router.get('/', (req, res) => {
+// GET all products (returns plain array to match serverless API)
+router.get('/', async (req, res) => {
     try {
-        res.json({
-            success: true,
-            count: products.length,
-            data: products
-        })
+        const client = await pool.connect()
+        await client.query(`
+            CREATE TABLE IF NOT EXISTS products (
+                id SERIAL PRIMARY KEY,
+                name TEXT NOT NULL,
+                category TEXT,
+                sub_category TEXT,
+                description TEXT,
+                image TEXT,
+                images TEXT[],
+                benefits TEXT[],
+                mrp NUMERIC,
+                sizes JSONB,
+                is_combo BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `)
+
+        const result = await client.query('SELECT * FROM products ORDER BY id ASC')
+
+        // If no rows, seed initialProducts
+        if (result.rows.length === 0) {
+            for (const p of initialProducts) {
+                await client.query(
+                    `INSERT INTO products (name, category, sub_category, description, image, images, benefits, mrp, sizes, is_combo) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+                    [p.name, p.category, p.subCategory || p.sub_category, p.description, p.image, p.images, p.benefits, p.mrp, JSON.stringify(p.sizes), p.isCombo || false]
+                )
+            }
+            const seeded = await client.query('SELECT * FROM products ORDER BY id ASC')
+            client.release()
+            return res.status(200).json(seeded.rows)
+        }
+
+        client.release()
+        return res.status(200).json(result.rows)
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message
-        })
+        console.error('Products GET Error:', error)
+        return res.status(500).json({ error: error.message })
     }
 })
 
 // GET single product by ID
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
-        const product = products.find(p => p.id === parseInt(req.params.id))
+        const client = await pool.connect()
+        const result = await client.query('SELECT * FROM products WHERE id = $1', [req.params.id])
+        client.release()
 
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                error: 'Product not found'
-            })
-        }
-
-        res.json({
-            success: true,
-            data: product
-        })
+        if (result.rows.length === 0) return res.status(404).json({ error: 'Product not found' })
+        return res.json(result.rows[0])
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message
-        })
+        console.error('Products GET /:id Error:', error)
+        return res.status(500).json({ error: error.message })
     }
 })
 
 // GET products by category
-router.get('/category/:category', (req, res) => {
+router.get('/category/:category', async (req, res) => {
     try {
-        const categoryProducts = products.filter(
-            p => p.category.toLowerCase() === req.params.category.toLowerCase()
-        )
-
-        res.json({
-            success: true,
-            count: categoryProducts.length,
-            data: categoryProducts
-        })
+        const client = await pool.connect()
+        const result = await client.query('SELECT * FROM products WHERE LOWER(category) = LOWER($1) ORDER BY id ASC', [req.params.category])
+        client.release()
+        return res.json(result.rows)
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            error: error.message
-        })
+        console.error('Products category Error:', error)
+        return res.status(500).json({ error: error.message })
+    }
+})
+
+// POST - create product or perform actions like reset
+router.post('/', async (req, res) => {
+    try {
+        const client = await pool.connect()
+        const { action } = req.body || {}
+        if (action === 'reset') {
+            await client.query('TRUNCATE TABLE products RESTART IDENTITY')
+            for (const p of initialProducts) {
+                await client.query(
+                    `INSERT INTO products (name, category, sub_category, description, image, images, benefits, mrp, sizes, is_combo) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+                    [p.name, p.category, p.subCategory || p.sub_category, p.description, p.image, p.images, p.benefits, p.mrp, JSON.stringify(p.sizes), p.isCombo || false]
+                )
+            }
+            client.release()
+            return res.status(200).json({ success: true, message: 'Database reset' })
+        }
+
+        const { name, category, subCategory, description, image, images, benefits, mrp, sizes, isCombo } = req.body
+        const result = await client.query(
+            `INSERT INTO products (name, category, sub_category, description, image, images, benefits, mrp, sizes, is_combo) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING *`,
+            [name, category, subCategory, description, image, images, benefits, mrp, JSON.stringify(sizes), isCombo]
+        )
+        client.release()
+        return res.status(201).json(result.rows[0])
+    } catch (error) {
+        console.error('Products POST Error:', error)
+        return res.status(500).json({ error: error.message })
+    }
+})
+
+// DELETE - delete product by id (query param `id`)
+router.delete('/', async (req, res) => {
+    try {
+        const { id } = req.query
+        if (!id) return res.status(400).json({ error: 'Missing id' })
+        const client = await pool.connect()
+        await client.query('DELETE FROM products WHERE id = $1', [id])
+        client.release()
+        return res.json({ success: true })
+    } catch (error) {
+        console.error('Products DELETE Error:', error)
+        return res.status(500).json({ error: error.message })
     }
 })
 
