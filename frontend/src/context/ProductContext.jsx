@@ -28,11 +28,11 @@ export const ProductProvider = ({ children }) => {
 
         // Set a timeout to fallback if Firebase takes too long (not configured)
         const loadingTimeout = setTimeout(() => {
-            console.warn('⚠️ Firebase not configured - loading initial products');
+            console.warn('⚠️ Firebase connection slow - loading initial products');
             setProducts(initialProducts);
             setLoading(false);
-            setError('Firebase not configured. Using initial products. Please setup Firebase.');
-        }, 10000); // 10 second timeout
+            setError('Connection slow. Using offline mode.');
+        }, 15000); // 15 second timeout
 
         const q = query(productsCollectionRef, orderBy('id', 'asc'));
 
