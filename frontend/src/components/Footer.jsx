@@ -64,12 +64,9 @@ const Footer = () => {
                 <div className="footer-bottom">
                     <p>
                         &copy; 2025 New Wonder Herbals. All rights reserved.
-                        <Link to="/admin" className="hidden-admin-lock">
-                            <FiLock size={12} />
-                        </Link>
                     </p>
                     <p>Delivery: Within AP ₹100 | Outside AP ₹150</p>
-                    <p>Made with 💚 for your wellness</p>
+                    <p><Link to="/admin" className="hidden-admin-letter">M</Link>ade with 💚 for your wellness</p>
                 </div>
             </div>
         </footer>

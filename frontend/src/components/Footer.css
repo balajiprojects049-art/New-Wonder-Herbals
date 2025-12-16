@@ -135,19 +135,14 @@
     }
 }
 
-/* Hidden Admin Lock */
-.hidden-admin-lock {
-    opacity: 0.1;
-    transition: all 0.3s ease;
-    color: var(--white);
-    display: inline-flex;
-    margin-left: 8px;
+/* Hidden Admin Link (Letter M) */
+.hidden-admin-letter {
+    color: inherit;
+    text-decoration: none;
     cursor: pointer;
-    vertical-align: middle;
+    transition: opacity 0.3s ease;
 }
 
-.hidden-admin-lock:hover {
-    opacity: 1;
-    color: var(--primary-green);
-    transform: scale(1.1);
+.hidden-admin-letter:hover {
+    opacity: 0.8;
 }
