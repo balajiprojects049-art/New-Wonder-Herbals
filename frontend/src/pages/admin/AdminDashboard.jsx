@@ -222,6 +222,11 @@ const AdminDashboard = () => {
         }
     }
 
+    const handleRemoveImage = (indexToRemove) => {
+        const updatedImages = (editForm.images || [editForm.image]).filter((_, index) => index !== indexToRemove)
+        setEditForm({ ...editForm, images: updatedImages })
+    }
+
     // Filtered Products
     const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -368,8 +373,46 @@ const AdminDashboard = () => {
                                     />
                                 </div>
 
+                                {/* Current Images Management */}
                                 <div className="form-group">
-                                    <label>Add More Images (Optional)</label>
+                                    <label>Current Images (Click X to remove)</label>
+                                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '5px' }}>
+                                        {(editForm.images || [editForm.image]).map((img, index) => (
+                                            <div key={index} style={{ position: 'relative', width: '80px', height: '80px' }}>
+                                                <img
+                                                    src={img}
+                                                    alt={`Product ${index}`}
+                                                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '4px', border: '1px solid #ddd' }}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveImage(index)}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '-5px',
+                                                        right: '-5px',
+                                                        background: '#ef4444',
+                                                        color: 'white',
+                                                        border: 'none',
+                                                        borderRadius: '50%',
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        cursor: 'pointer',
+                                                        fontSize: '12px'
+                                                    }}
+                                                >
+                                                    <FiX />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Add More New Images (Optional)</label>
                                     <input
                                         type="file"
                                         accept="image/*"
