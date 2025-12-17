@@ -186,6 +186,13 @@ const AdminDashboard = () => {
 
     const handleEditSave = async () => {
         try {
+            console.log("Starting edit save for ID:", editForm.id);
+            if (!editForm.id) {
+                showToast('Error: Product ID is missing', 'error');
+                return;
+            }
+            showToast('Saving changes...', 'info');
+
             let imagesToSave = editForm.images || [editForm.image]
 
             if (editForm.newImageFiles && editForm.newImageFiles.length > 0) {
@@ -195,25 +202,30 @@ const AdminDashboard = () => {
                 imagesToSave = [...imagesToSave, ...processedNewImages]
             }
 
-            const benefitsArray = editForm.benefitsStr.split('\n').filter(b => b.trim() !== '')
+            const benefitsArray = editForm.benefitsStr ? editForm.benefitsStr.split('\n').filter(b => b.trim() !== '') : []
             const sizesArray = editForm.editSize && editForm.editPrice ? [{
                 size: editForm.editSize,
                 price: parseFloat(editForm.editPrice)
             }] : []
 
-            const result = await updateProduct({
+            const updateData = {
                 ...editForm,
                 images: imagesToSave,
                 image: imagesToSave[0],
                 benefits: benefitsArray,
                 sizes: sizesArray,
                 mrp: editForm.editMrp ? parseFloat(editForm.editMrp) : null
-            })
+            };
+
+            console.log("Sending update data:", updateData);
+
+            const result = await updateProduct(updateData)
 
             if (result.success) {
                 setEditingId(null)
                 showToast('Product updated successfully in cloud database!')
             } else {
+                console.error("Update failed:", result.error);
                 showToast('Error updating product: ' + (result.error || 'Unknown error'), 'error')
             }
         } catch (error) {
