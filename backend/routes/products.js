@@ -121,6 +121,34 @@ router.post('/', async (req, res) => {
     }
 })
 
+// PUT - update product
+router.put('/', async (req, res) => {
+    try {
+        const { id } = req.query
+        if (!id) return res.status(400).json({ error: 'Missing id param' })
+
+        const { name, category, subCategory, description, image, images, benefits, mrp, sizes, isCombo } = req.body
+
+        const client = await pool.connect()
+        const result = await client.query(
+            `UPDATE products 
+             SET name=$1, category=$2, sub_category=$3, description=$4, image=$5, images=$6, benefits=$7, mrp=$8, sizes=$9, is_combo=$10 
+             WHERE id=$11 RETURNING *`,
+            [name, category, subCategory || req.body.sub_category, description, image, images, benefits, mrp, JSON.stringify(sizes), isCombo, id]
+        )
+        client.release()
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Product not found' })
+        }
+
+        return res.json(result.rows[0])
+    } catch (error) {
+        console.error('Products PUT Error:', error)
+        return res.status(500).json({ error: error.message })
+    }
+})
+
 // DELETE - delete product by id (query param `id`)
 router.delete('/', async (req, res) => {
     try {

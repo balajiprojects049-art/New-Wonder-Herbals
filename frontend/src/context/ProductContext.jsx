@@ -60,10 +60,19 @@ export const ProductProvider = ({ children }) => {
         }
     };
 
-    const updateProduct = async (productId, updates) => {
-        // Implementation for update would go here (PUT request)
-        // For now, focusing on Add/Delete/Reset
-        return { success: true };
+    const updateProduct = async (productData) => {
+        try {
+            const response = await fetch(`/api/products?id=${productData.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
+            });
+            if (!response.ok) throw new Error('Failed to update product');
+            await fetchProducts();
+            return { success: true };
+        } catch (err) {
+            return { success: false, error: err.message };
+        }
     };
 
     const deleteProduct = async (productId) => {
