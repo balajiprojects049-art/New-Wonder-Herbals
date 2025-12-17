@@ -95,9 +95,9 @@ const AdminDashboard = () => {
                     let width = img.width
                     let height = img.height
 
-                    if (width > 800) {
-                        height = height * (800 / width)
-                        width = 800
+                    if (width > 600) {
+                        height = height * (600 / width)
+                        width = 600
                     }
 
                     canvas.width = width
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
                     const ctx = canvas.getContext('2d')
                     ctx.drawImage(img, 0, 0, width, height)
 
-                    resolve(canvas.toDataURL('image/jpeg', 0.7))
+                    resolve(canvas.toDataURL('image/jpeg', 0.5))
                 }
             }
             reader.onerror = error => reject(error)
@@ -193,8 +193,13 @@ const AdminDashboard = () => {
             }
             showToast('Saving changes...', 'info');
 
+            // Find original product to compare changes
+            const originalProduct = products.find(p => p.id === editForm.id);
+            if (!originalProduct) throw new Error("Original product not found");
+
             let imagesToSave = editForm.images || [editForm.image]
 
+            // Process new images only if added
             if (editForm.newImageFiles && editForm.newImageFiles.length > 0) {
                 const processedNewImages = await Promise.all(
                     Array.from(editForm.newImageFiles).map(file => processImage(file))
@@ -209,7 +214,11 @@ const AdminDashboard = () => {
             }] : []
 
             const updateData = {
-                ...editForm,
+                id: editForm.id,
+                name: editForm.name,
+                category: editForm.category,
+                subCategory: editForm.subCategory,
+                description: editForm.description,
                 images: imagesToSave,
                 image: imagesToSave[0],
                 benefits: benefitsArray,
@@ -217,7 +226,10 @@ const AdminDashboard = () => {
                 mrp: editForm.editMrp ? parseFloat(editForm.editMrp) : null
             };
 
-            console.log("Sending update data:", updateData);
+            // Optimization: Remove fields that haven't changed (optional but good for debugging)
+            // For images, we always send the full new list because the backend replaces the array.
+
+            console.log("Sending optimized update data:", updateData);
 
             const result = await updateProduct(updateData)
 
