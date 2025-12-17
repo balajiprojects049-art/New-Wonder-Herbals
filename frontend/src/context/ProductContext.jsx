@@ -62,16 +62,32 @@ export const ProductProvider = ({ children }) => {
 
     const updateProduct = async (productData) => {
         try {
+            console.log("ProductContext: sending PUT request for", productData.id);
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
             const response = await fetch(`/api/products?id=${productData.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(productData)
+                body: JSON.stringify(productData),
+                signal: controller.signal
             });
-            if (!response.ok) throw new Error('Failed to update product');
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error("ProductContext: Update failed", errorText);
+                throw new Error(errorText || 'Server error during update');
+            }
+
             await fetchProducts();
             return { success: true };
         } catch (err) {
-            return { success: false, error: err.message };
+            console.error("ProductContext: Exception", err);
+            return {
+                success: false,
+                error: err.name === 'AbortError' ? 'Request timed out (server took too long)' : err.message
+            };
         }
     };
 
