@@ -82,6 +82,42 @@ module.exports = async function handler(req, res) {
             return res.status(201).json(result.rows[0]);
         }
 
+        if (req.method === 'PUT') {
+            const { id } = req.query;
+            const { name, category, subCategory, description, image, images, benefits, mrp, sizes, isCombo } = req.body;
+
+            if (!id) {
+                client.release();
+                return res.status(400).json({ error: 'Missing product id' });
+            }
+
+            // Fetch existing product to preserve unspecified fields
+            const existing = await client.query('SELECT * FROM products WHERE id = $1', [id]);
+            if (existing.rows.length === 0) {
+                client.release();
+                return res.status(404).json({ error: 'Product not found' });
+            }
+
+            const cur = existing.rows[0];
+
+            const updatedName = name !== undefined ? name : cur.name;
+            const updatedCategory = category !== undefined ? category : cur.category;
+            const updatedSubCategory = subCategory !== undefined ? subCategory : cur.sub_category;
+            const updatedDescription = description !== undefined ? description : cur.description;
+            const updatedImage = image !== undefined ? image : cur.image;
+            const updatedImages = images !== undefined ? images : cur.images;
+            const updatedBenefits = benefits !== undefined ? benefits : cur.benefits;
+            const updatedMrp = mrp !== undefined ? mrp : cur.mrp;
+            const updatedSizes = sizes !== undefined ? JSON.stringify(sizes) : cur.sizes;
+            const updatedIsCombo = isCombo !== undefined ? isCombo : cur.is_combo;
+
+            const result = await client.query(`UPDATE products SET name=$1, category=$2, sub_category=$3, description=$4, image=$5, images=$6, benefits=$7, mrp=$8, sizes=$9, is_combo=$10 WHERE id=$11 RETURNING *`,
+                [updatedName, updatedCategory, updatedSubCategory, updatedDescription, updatedImage, updatedImages, updatedBenefits, updatedMrp, updatedSizes, updatedIsCombo, id]);
+
+            client.release();
+            return res.status(200).json({ success: true, product: result.rows[0] });
+        }
+
         if (req.method === 'DELETE') {
             const { id } = req.query;
             await client.query('DELETE FROM products WHERE id = $1', [id]);
