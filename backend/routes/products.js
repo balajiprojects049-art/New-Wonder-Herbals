@@ -121,21 +121,56 @@ router.post('/', async (req, res) => {
     }
 })
 
-// PUT - update product
+// PUT - update product (Dynamic Partial Update)
 router.put('/', async (req, res) => {
     try {
         const { id } = req.query
         if (!id) return res.status(400).json({ error: 'Missing id param' })
 
-        const { name, category, subCategory, description, image, images, benefits, mrp, sizes, isCombo } = req.body
+        const updates = req.body
+        delete updates.id // Ensure ID is not updated
+        delete updates.created_at // Ensure created_at is not updated
+
+        // 1. Filter out keys that are undefined/null (unless you want to allow clearing fields)
+        // For simplicity, we'll strip keys that are NOT in the allowed list or are undefined
+        const allowedColumns = ['name', 'category', 'sub_category', 'subCategory', 'description', 'image', 'images', 'benefits', 'mrp', 'sizes', 'is_combo', 'isCombo']
+        const keysToUpdate = Object.keys(updates).filter(key => allowedColumns.includes(key) && updates[key] !== undefined)
+
+        if (keysToUpdate.length === 0) {
+            return res.status(400).json({ error: 'No valid fields to update' })
+        }
+
+        // 2. Build the Dynamic Query
+        // We need to map frontend keys (subCategory) to DB columns (sub_category) if they differ
+        const columnMapping = {
+            'subCategory': 'sub_category',
+            'isCombo': 'is_combo'
+        }
+
+        const setClauses = []
+        const values = []
+        let paramIndex = 1
+
+        keysToUpdate.forEach(key => {
+            const dbColumn = columnMapping[key] || key
+
+            let value = updates[key]
+
+            // Special handling for JSON/Array fields if needed
+            if (key === 'sizes') value = JSON.stringify(value)
+
+            setClauses.push(`${dbColumn} = $${paramIndex}`)
+            values.push(value)
+            paramIndex++
+        })
+
+        // Add ID as the last parameter
+        values.push(id)
+
+        const queryText = `UPDATE products SET ${setClauses.join(', ')} WHERE id = $${paramIndex} RETURNING *`
 
         const client = await pool.connect()
-        const result = await client.query(
-            `UPDATE products 
-             SET name=$1, category=$2, sub_category=$3, description=$4, image=$5, images=$6, benefits=$7, mrp=$8, sizes=$9, is_combo=$10 
-             WHERE id=$11 RETURNING *`,
-            [name, category, subCategory || req.body.sub_category, description, image, images, benefits, mrp, JSON.stringify(sizes), isCombo, id]
-        )
+        const result = await client.query(queryText, values)
         client.release()
 
         if (result.rows.length === 0) {
