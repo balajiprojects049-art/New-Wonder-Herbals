@@ -197,9 +197,9 @@ const AdminDashboard = () => {
             const originalProduct = products.find(p => p.id === editForm.id);
             if (!originalProduct) throw new Error("Original product not found");
 
+            // 1. Calculate the final list of images (existing + new)
             let imagesToSave = editForm.images || [editForm.image]
 
-            // Process new images only if added
             if (editForm.newImageFiles && editForm.newImageFiles.length > 0) {
                 const processedNewImages = await Promise.all(
                     Array.from(editForm.newImageFiles).map(file => processImage(file))
@@ -207,27 +207,48 @@ const AdminDashboard = () => {
                 imagesToSave = [...imagesToSave, ...processedNewImages]
             }
 
+            // 2. Check if images have changed
+            // We compare length and content of the first few arrays to be safe, 
+            // or simply check if new files were added OR if the length differs from original
+            const originalImages = originalProduct.images || [originalProduct.image].filter(Boolean);
+
+            const hasNewImages = editForm.newImageFiles && editForm.newImageFiles.length > 0;
+            const hasRemovedImages = imagesToSave.length !== originalImages.length;
+
+            // Note: If user re-ordered or removed specific images (complex), simple length check might fail.
+            // But 'handleRemoveImage' filters the array, so length check + 'hasNewImages' is a good proxy.
+            // For a robust check, we can check if every image signature matches, but strict equality is hard with base64/urls.
+            // Let's assume if length changed OR new files added, we update.
+            // Also check if any existing URL is NOT in the new list (deletion of specific one)
+            const imagesChanged = hasNewImages || hasRemovedImages ||
+                !imagesToSave.every((img, i) => img === originalImages[i]);
+
             const benefitsArray = editForm.benefitsStr ? editForm.benefitsStr.split('\n').filter(b => b.trim() !== '') : []
             const sizesArray = editForm.editSize && editForm.editPrice ? [{
                 size: editForm.editSize,
                 price: parseFloat(editForm.editPrice)
             }] : []
 
+            // 3. Construct Payload
             const updateData = {
                 id: editForm.id,
                 name: editForm.name,
                 category: editForm.category,
                 subCategory: editForm.subCategory,
                 description: editForm.description,
-                images: imagesToSave,
-                image: imagesToSave[0],
                 benefits: benefitsArray,
                 sizes: sizesArray,
                 mrp: editForm.editMrp ? parseFloat(editForm.editMrp) : null
             };
 
-            // Optimization: Remove fields that haven't changed (optional but good for debugging)
-            // For images, we always send the full new list because the backend replaces the array.
+            // Only add images if they changed
+            if (imagesChanged) {
+                console.log("Images changed, including in payload");
+                updateData.images = imagesToSave;
+                updateData.image = imagesToSave[0];
+            } else {
+                console.log("Images NOT changed, skipping");
+            }
 
             console.log("Sending optimized update data:", updateData);
 
@@ -235,7 +256,7 @@ const AdminDashboard = () => {
 
             if (result.success) {
                 setEditingId(null)
-                showToast('Product updated successfully in cloud database!')
+                showToast('Product updated successfully!')
             } else {
                 console.error("Update failed:", result.error);
                 showToast('Error updating product: ' + (result.error || 'Unknown error'), 'error')

@@ -64,7 +64,7 @@ export const ProductProvider = ({ children }) => {
         try {
             console.log("ProductContext: sending PUT request for", productData.id);
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
 
             const response = await fetch(`/api/products?id=${productData.id}`, {
                 method: 'PUT',
